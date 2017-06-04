@@ -5,9 +5,10 @@ const expres = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
-var {mongoose} = require('./db/mongoose.js');
-var {Todo} = require('./models/todo.js');
-var {User} = require('./models/user.js');
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
+var {authenticate} = require ('./middleware/authenticate');
 
 var app = expres();
 
@@ -112,6 +113,9 @@ app.post('/user', (req, res) => {
     });
 });
 
+app.get('/user/me', authenticate, (req, res) => {
+   res.send(req.user);
+});
 
 app.listen(port, () => {
     console.log(`Starting on port ${port}`);
